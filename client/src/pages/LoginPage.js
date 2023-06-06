@@ -7,5 +7,5 @@ const LoginPage = () => {
       <button>Login</button>
     </form>
   );
-};
+}; 
 export default LoginPage;
