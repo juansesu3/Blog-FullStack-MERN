@@ -5,12 +5,12 @@ const User = require("./api/models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const multer = require('multer');
+const uploadMiddleware = multer({dest: 'api/uploads/'});
 
 const app = express();
-
 const salt = bcrypt.genSaltSync(10);
 const secret = "dfwsf436234gwegw567453w45wvg534";
-
 const PORT = 7000;
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
@@ -62,6 +62,10 @@ app.get("/profile", (req, res) => {
 
 app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
+});
+
+app.post("/post", uploadMiddleware.single('file'), (req, res) => {
+  res.json(req.files);
 });
 
 app.listen(PORT);
