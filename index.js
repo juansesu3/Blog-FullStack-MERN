@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { mongoose } = require("mongoose");
 const User = require("./api/models/User");
-const Post = require('./api/models/Post');
+const Post = require("./api/models/Post");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
@@ -72,16 +72,29 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   const ext = parts[parts.length - 1];
   const newPath = path + "." + ext;
   fs.renameSync(path, newPath);
-  const {title, summary, content} = req.body;
-  const postDoc = await  Post.create({
+
+  const { token } = req.cookies;
+
+  jwt.verify(token, secret, {}, async (err, info) => {
+    if (err) throw err;
+    const { title, summary, content } = req.body;
+  const postDoc = await Post.create({
     title,
     summary,
     content,
-    cover:newPath,
-
-
-  })
+    cover: newPath,
+    author: info.id
+  });
   res.json(postDoc);
+});
+
+ 
+  });
+
+  
+app.get("/post", async (req, res) => {
+  const posts = await Post.find().populate('author', ['userName']);
+  res.json(posts);
 });
 
 app.listen(PORT);

@@ -68,6 +68,7 @@ div.post p.info {
 
 div.post p.info a.author {
   color: #333;
+  text-decoration: none;
 
 
 }
