@@ -49,6 +49,7 @@ const CreatePost = () => {
       method: "POST",
       body: data,
     });
+    response.json();
 
  
   };
