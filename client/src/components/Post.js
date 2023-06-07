@@ -5,7 +5,7 @@ const Post = ({title, summary, cover, content, createdAt, author}) => {
   return (
     <div className="post">
       <div className="image">
-        <img src="https://techcrunch.com/wp-content/uploads/2022/12/lawnmower-Large.jpeg?w=990&crop=1" />
+        <img src={'http://localhost:7000/'+cover} alt='image-post' />
       </div>
 
       <div className="texts">

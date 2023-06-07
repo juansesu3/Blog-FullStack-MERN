@@ -18,6 +18,9 @@ const PORT = 7000;
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
 app.use(cookieParser());
+
+app.use('/api/uploads/', express.static(__dirname + '/api/uploads/'))
+
 mongoose.connect(
   "mongodb+srv://blog:UBzVfykcx3QDNT1y@cluster0.ahnsr05.mongodb.net/?retryWrites=true&w=majority"
 );
@@ -78,22 +81,22 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   jwt.verify(token, secret, {}, async (err, info) => {
     if (err) throw err;
     const { title, summary, content } = req.body;
-  const postDoc = await Post.create({
-    title,
-    summary,
-    content,
-    cover: newPath,
-    author: info.id
+    const postDoc = await Post.create({
+      title,
+      summary,
+      content,
+      cover: newPath,
+      author: info.id,
+    });
+    res.json(postDoc);
   });
-  res.json(postDoc);
 });
 
- 
-  });
-
-  
 app.get("/post", async (req, res) => {
-  const posts = await Post.find().populate('author', ['userName']);
+  const posts = await Post.find()
+    .populate("author", ["userName"])
+    .sort({ createdAt: -1 })
+    .limit(20);
   res.json(posts);
 });
 
