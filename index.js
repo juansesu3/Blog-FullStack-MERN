@@ -4,7 +4,7 @@ const { mongoose } = require("mongoose");
 const User = require("./api/models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
@@ -41,7 +41,10 @@ app.post("/login", async (req, res) => {
     //login
     jwt.sign({ userName, id: userDoc._id }, secret, {}, (err, token) => {
       if (err) throw err;
-      res.cookie("token", token).json("ok");
+      res.cookie("token", token).json({
+        id: userDoc._id,
+        userName,
+      });
     });
   } else {
     //not login
@@ -49,19 +52,17 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get('/profile', (req, res)=>{
-  const {token} = req.cookies;
-  jwt.verify(token, secret, {}, (err, info)=>{
-    if(err) throw err;
-      res.json(info);
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) throw err;
+    res.json(info);
   });
 });
 
-app.post('/logout', (req,res)=>{
-  res.cookie('token', '').json('ok')
-
-
-})
+app.post("/logout", (req, res) => {
+  res.cookie("token", "").json("ok");
+});
 
 app.listen(PORT);
 //mongodb+srv://blog:UBzVfykcx3QDNT1y@cluster0.ahnsr05.mongodb.net/?retryWrites=true&w=majority
