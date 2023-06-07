@@ -83,7 +83,7 @@ form.login, form.register{
   margin: 0 auto;
 
 }
-form h1{
+form.login h1, form.resgiter h1{
   text-align: center;
 
 }
