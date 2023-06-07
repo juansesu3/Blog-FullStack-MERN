@@ -19,7 +19,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/uploads/', express.static(__dirname + '/api/uploads/'))
+app.use("/api/uploads/", express.static(__dirname + "/api/uploads/"));
 
 mongoose.connect(
   "mongodb+srv://blog:UBzVfykcx3QDNT1y@cluster0.ahnsr05.mongodb.net/?retryWrites=true&w=majority"
@@ -98,6 +98,12 @@ app.get("/post", async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(20);
   res.json(posts);
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await Post.findById(id).populate("author", ["userName"]);
+  res.json(postDoc);
 });
 
 app.listen(PORT);
