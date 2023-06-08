@@ -1,9 +1,9 @@
-import { useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../userContext";
 
 const Header = () => {
-  const { setUserInfo, userInfo} = useContext(UserContext);
+  const { setUserInfo, userInfo } = useContext(UserContext);
 
   useEffect(() => {
     fetch("http://localhost:7000/profile", {
@@ -23,8 +23,7 @@ const Header = () => {
     setUserInfo(null);
   };
 
- const userName = userInfo?.userName
-
+  const userName = userInfo?.userName;
 
   return (
     <header>
@@ -34,7 +33,6 @@ const Header = () => {
       <nav>
         {userName && (
           <>
-         
             <Link to={"/create"}>Create new post</Link>
             <a onClick={logout}>Logout</a>
           </>
